@@ -26,17 +26,15 @@ def edit_Media_Data():
 
             filedata = l_archivos[f].replace('.mp3', '').split(' - ')
             file['artist'] = filedata[0]
-
-            if (len(filedata) == 2):
-                file['title'] = filedata[1]
-            elif (len(filedata) == 3):
-                file['title'] = filedata[1] + ' ' + filedata[2]
-            elif (len(filedata) == 4):
-                file['title'] = filedata[1] + ' ' + filedata[2] + ' ' + filedata[3]
-            
-            print(f)
-            print(filedata)
+            file['title'] = generate_title(filedata)
+            print(f+1, file['artist'], file['title'])
             file.pprint()
             file.save()
+
+def generate_title(filedata):
+    title = ''
+    for i in range(len(filedata)-1):
+        title+= filedata[i+1] + ' '
+    return title
 
 edit_Media_Data()
