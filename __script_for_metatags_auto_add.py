@@ -1,0 +1,42 @@
+# Script for placing meta tags in tracks from the filename
+# Place in the directory with the music -> run
+import mutagen
+# from mutagen.mp3 import MP3
+from os import scandir
+
+from mutagen.easyid3 import EasyID3
+
+root = './'
+l_archivos = sorted([archivo.name for archivo in scandir(root) if archivo.is_file()])
+
+mutagen.File(l_archivos[1])      # U: See the tags of the data
+# print(mutagen)
+
+def edit_Media_Data():
+
+    for f in range(len(l_archivos[:-1])):                 # A: A range of all the fields exept the script
+        
+        
+        if (l_archivos[f].endswith('mp3')):
+
+            try:
+                file = EasyID3(l_archivos[f])                         # A: Capture the file to edit
+            except BaseException as err:
+                print(f"Unexpected {err=}, {type(err)=}")
+
+            filedata = l_archivos[f].replace('.mp3', '').split(' - ')
+            file['artist'] = filedata[0]
+
+            if (len(filedata) == 2):
+                file['title'] = filedata[1]
+            elif (len(filedata) == 3):
+                file['title'] = filedata[1] + ' ' + filedata[2]
+            elif (len(filedata) == 4):
+                file['title'] = filedata[1] + ' ' + filedata[2] + ' ' + filedata[3]
+            
+            print(f)
+            print(filedata)
+            file.pprint()
+            file.save()
+
+edit_Media_Data()
